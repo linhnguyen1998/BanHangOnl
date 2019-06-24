@@ -1,0 +1,242 @@
+{% load static %}
+{% load custom_filter %}
+<header class="header">
+
+		<!-- Top Bar -->
+
+		<div class="top_bar">
+			<div class="container">
+				<div class="row">
+					<div class="col d-flex flex-row">
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{% static 'images/phone.png' %}" alt=""></div>+84 37445 1155 </div>
+						<div class="top_bar_contact_item"><div class="top_bar_icon"><img src="{% static 'images/mail.png' %}" alt=""></div><a href="mailto:linhvip1998vl@gmail.com">linhvip1998vl@gmail.com</a></div>
+						<div class="top_bar_content ml-auto">
+							<div class="top_bar_user">
+								<div class="user_icon"><img src="{% static 'images/user.svg' %}" alt=""></div>
+								{% if user.username %}
+                                    <div><a>Xin chào {{ user.username }}</a></div>
+                                    <div><a style="cursor: pointer" onclick="dangxuat()">Đăng xuất</a></div>
+                                 {% else %}
+                                  <div><a style="cursor: pointer" onclick="dangnhap()">Đăng nhập</a></div>
+								<div><a style="cursor: pointer" onclick="dangky()">Đăng ký</a></div>
+                                {% endif %}
+                                <script>
+                                function dangnhap(){
+                                window.location = "{% url 'login' %}";
+                                }
+                                function  dangky() {
+                                    window.location = "{% url 'register' %}";
+                                }
+                                function dangxuat(){
+                                    var a = confirm("Trước khi đăng xuất, có muốn xem kỹ lại hóa đơn không vậy bạn trẻ???");
+                                    if(a)
+                                        window.location = "{% url 'logout' %}";
+                                    else
+                                    {}
+                                }
+                            </script>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Header Main -->
+
+    <style>
+	.fixed
+	{
+		position: fixed;
+		z-index: 100000;
+		top: 0px;
+		background-color: #FFFFFF;
+		width: 100%;
+	}
+    </style>
+
+
+		<div class="header_main" id="keochuot">
+			<div class="container">
+				<div class="row">
+
+					<!-- Logo -->
+					<div class="col-lg-2 col-sm-3 col-3 order-1">
+						<div class="logo_container">
+							<div class="logo"><a href="#">VLU'sTech</a></div>
+						</div>
+					</div>
+
+					<!-- Search -->
+					<div class="col-lg-6 col-12 order-lg-2 order-3 text-lg-left text-right">
+						<div class="header_search">
+							<div class="header_search_content">
+								<div class="header_search_form_container">
+									<form method="GET" action="{% url 'search' %}" class="header_search_form clearfix">
+										<input type="search" name="q" value="{{ request.GET.q }}" required="required" class="header_search_input" placeholder="Tìm sản phẩm...">
+										<div class="custom_dropdown">
+											<div class="custom_dropdown_list">
+												<span class="custom_dropdown_placeholder clc">Tất cả loại sản phẩm</span>
+												<i class="fas fa-chevron-down"></i>
+												<ul class="custom_list clc">
+													{% for parent in parents %}
+													<li><a class="clc" href="#">{{ parent.title }}</a></li>
+                                                    {% endfor %}
+												</ul>
+											</div>
+										</div>
+										<button type="submit" class="header_search_button trans_300" value="Submit"><img src="{% static 'images/search.png'%}" alt=""></button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Wishlist -->
+					<div class="col-lg-4 col-9 order-lg-3 order-2 text-lg-left text-right">
+						<div class="wishlist_cart d-flex flex-row align-items-center justify-content-end">
+
+							<!-- Cart -->
+							<div class="cart">
+								<div class="cart_container d-flex flex-row align-items-center justify-content-end">
+									<div class="cart_icon">
+										<img src="{% static 'images/cart.png' %}" alt="" style="cursor: pointer" onclick="kiemtradangnhap()">
+										<div class="cart_count"><span id="sl"></span></div>
+									</div>
+									<div class="cart_content">
+										<div class="cart_text"><a style="cursor: pointer" onclick="kiemtradangnhap()">Giỏ hàng</a></div>
+										<div class="cart_price" id="gia"></div>
+                                        <script>
+                                            function kiemtradangnhap(){
+                                                var a = "{{ user.id }}";
+                                                if(a=="None")
+                                                {
+                                                    alert("Vui lòng đăng nhập");
+                                                }
+                                                else
+                                                {
+                                                    var cate = "{{ cate.id }}";
+                                                    if(cate!="None")
+                                                    var  temp=cate.charAt(0);
+                                                    if(temp=="1"||temp=="2"||temp=="3"||temp=="4"||temp=="5"||temp=="6"||temp=="7"||temp=="8"||temp=="9")
+                                                    {
+                                                        window.location= "{% url 'total_cart'  %}";
+                                                    }
+                                                    else if(cate=="None")
+                                                        window.location= "{% url 'total_cart'  %}";
+                                                    else
+                                                        window.location= "{% url 'total_cart'  %}";
+                                                }
+                                            }
+                                        </script>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Main Navigation -->
+
+		<nav class="main_nav">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+
+						<div class="main_nav_content d-flex flex-row">
+
+							<!-- Categories Menu -->
+
+							<div class="cat_menu_container">
+								<div class="cat_menu_title d-flex flex-row align-items-center justify-content-start">
+									<div class="cat_burger"><span></span><span></span><span></span></div>
+									<div class="cat_menu_text">Loại sản phẩm</div>
+								</div>
+
+								<ul class="cat_menu">
+                                     {%  for parent in parents %}
+									<li class="hassubs">
+										<a href="/home/{{ parent.id }}">{{ parent.title }}<i class="fas fa-chevron-right"></i></a>
+										<ul>
+                                            {% for child in parent.id|getChilds %}
+											<li class="hassubs">
+												<a href="/home/{{ child.id }}">{{ child.title }}<i class="fas fa-chevron-right"></i></a>
+											</li>
+                                             {% endfor %}
+										</ul>
+									</li>
+                                     {% endfor %}
+								</ul>
+							</div>
+
+							<!-- Main Nav Menu -->
+
+							<div class="main_nav_menu ml-auto">
+								<ul class="standard_dropdown main_nav_dropdown">
+									<li><a href="{% url 'home' %}">Trang chủ<i class="fas fa-chevron-down"></i></a></li>
+									<li><a href="#">Blog<i class="fas fa-chevron-down"></i></a></li>
+									<li><a href="tel:+84374451155" rel="nofollow">Liên hệ<i class="fas fa-chevron-down"></i></a></li>
+								</ul>
+							</div>
+
+							<!-- Menu Trigger -->
+
+							<div class="menu_trigger_container ml-auto">
+								<div class="menu_trigger d-flex flex-row align-items-center justify-content-end">
+									<div class="menu_burger">
+										<div class="menu_trigger_text">tài khoản</div>
+										<div class="cat_burger menu_burger_inner"><span></span><span></span><span></span></div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Menu -->
+
+		<div class="page_menu">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+
+						<div class="page_menu_content">
+
+							<div class="page_menu_search">
+								<form method="GET" action="{% url 'search' %}">
+									<input type="search" name="q" value="{{ request.GET.q }}"  required="required" class="page_menu_search_input" placeholder="Tìm sản phẩm...">
+								</form>
+							</div>
+							<ul class="page_menu_nav">
+								<li class="page_menu_item"><div class="top_bar_user">
+								<div class="user_icon"><img src="{% static 'images/user.svg' %}" alt=""></div>
+								{% if user.username %}
+                                    <div><a>Xin chào {{ user.username }}</a></div>
+                                    <div><a style="cursor: pointer" onclick="dangxuat()">Đăng xuất</a></div>
+                                 {% else %}
+                                  <div><a style="cursor: pointer" onclick="dangnhap()">Đăng nhập</a></div>
+								<div><a style="cursor: pointer" onclick="dangky()">Đăng ký</a></div>
+                                {% endif %}</div></li>
+                                <li class="page_menu_item">
+									<a href="{% url 'home' %}">Home<i class="fa fa-angle-down"></i></a>
+								</li>
+								<li class="page_menu_item"><a href="#">blog<i class="fa fa-angle-down"></i></a></li>
+								<li class="page_menu_item"><a href="tel:+84 37445 1155" rel="nofollow">contact<i class="fa fa-angle-down"></i></a></li>
+							</ul>
+
+							<div class="menu_contact">
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{% static 'images/phone_white.png' %}" alt=""></div>+84 37445 1155</div>
+								<div class="menu_contact_item"><div class="menu_contact_icon"><img src="{% static 'images/mail_white.png' %}" alt=""></div><a href="mailto:linhvip1998vl@gmail.com">linhvip1998vl@gmail.com</a></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</header>

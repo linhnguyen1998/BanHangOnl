@@ -1,0 +1,132 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% load custom_filter %}
+
+{% block header %}
+
+<title>HÓA ĐƠN</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="OneTech shop project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% endblock %}
+
+{% block cssblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+<link href="{% static 'plugins/fontawesome-free-5.0.1/css/fontawesome-all.css' %}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart_styles.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'styles/cart_responsive.css' %}">
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.0.min.js' %}"></script>
+
+{% endblock %}
+
+
+{% block content %}
+<style>
+#table{
+	margin: auto;
+	margin-top: 2%;
+	width:90%;
+}
+#table table{
+	width:100%;
+	font-family:"Times New Roman";
+}
+
+#table table th{
+	text-align:center;
+	border:2px solid black;
+	font-size:20px;
+}
+#table table td{
+	border:2px solid black;
+	padding:10px;
+	line-height:inherit;
+	font-size:16px;
+	color:#000;
+}
+</style>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	
+	{% include 'home/nvarbar.html' %}
+
+	<!-- Cart -->
+    <script>
+        function inhoadon() {
+            window.print();
+        }
+    </script>
+	<center>
+
+    <div id="table">
+	<table style="height: 400px" >
+        <tr><th colspan="3">Chúc mừng {{ user.username }} đã thanh toán thành công</th></tr>
+        <tr><th colspan="2">Hóa đơn chi tiết của bạn gồm:</th><th>In hóa đơn: <img style="height: 40px; width: 40px" src="{% static 'images/img_411831.png' %}" onclick="inhoadon()"></th></tr>
+	<tr>
+	<th style="color: #0069d9 ">Tên sản phẩm</th>
+	<th style="color: #0069d9 ">Số lượng</th>
+	<th style="color: #0069d9 ">Giá</th>
+	</tr>
+        {% for item in items %}
+	<tr >
+
+		<th>{{ item.item.title }}</th>
+        <th>{{ item.quantity }}</th>
+        <th>{{ item.item.price }}</th>
+
+	</tr>
+        {% endfor %}
+	<tr>
+	<th style="color:red ">Tổng cộng:</th>
+    <th></th>
+	<th  style="color:red " >{{ total }}</th>
+	</tr>
+	</table>
+    </div>
+	</center>
+
+
+	<!-- Newsletter -->
+
+
+<!-- Footer -->
+    {% include 'home/footer.html' %}
+
+</div>
+{% endblock %}
+
+{% block jsblock %}
+
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TweenMax.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/TimelineMax.min.js' %}"></script>
+<script src="{% static 'plugins/scrollmagic/ScrollMagic.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/animation.gsap.min.js' %}"></script>
+<script src="{% static 'plugins/greensock/ScrollToPlugin.min.js' %}"></script>
+<script src="{% static 'plugins/easing/easing.js' %}"></script>
+<script src="{% static 'js/cart_custom.js' %}"></script>
+
+    <script>
+    var vt=$('#keochuot').position();
+$(window).scroll(function () {
+	var vitri = $(document).scrollTop();
+	if(parseInt(vitri)>parseInt(vt.top))
+	{
+   $('#keochuot').addClass('fixed');
+
+	}
+	else
+	{
+		$('#keochuot').removeClass('fixed');
+	}
+});
+</script>
+
+
+{% endblock %}
