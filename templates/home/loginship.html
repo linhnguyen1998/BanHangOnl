@@ -18,7 +18,7 @@
    <div style="margin-left: 10%;margin-top: 10%">
     <div style="color: red">Chúng tôi đã gửi mã xát nhận về email của bạn vui lòng kiểm tra hộp thư</div>
        <p></p>
-    <div>Mã Code có hiệu lực trong 60s</div>
+    <div id="thoigian">Mã Code có hiệu lực trong 60s</div>
        <p></p>
 <strong>Code:</strong><input type="text" id="macode" >
        <div id="baoloi"></div>
@@ -27,7 +27,31 @@
        <input type="button" value="Gửi Lại Mã" style="background-color: #0e8ce4;border-radius: 8px;margin-top: 23px;width: 100px;height: 30px" onclick="laymatkhau()"></div>
        </div>
 </div>
+<script>
+var bien =10;
 
+    function tru()
+    {
+        bien=bien-1;
+        $('#thoigian').html("Mã Code có hiệu lực trong "+bien+"s");
+        if(bien>0)
+        {
+        setTimeout(tao,10);
+        }
+        else
+        { $("#macode").prop('disabled', true);
+
+        }
+
+    }
+    function tao()
+    {
+
+        setTimeout(tru,1000);
+    }
+
+
+</script>
 <body>
 
   <div class="login-card">
@@ -65,7 +89,9 @@
       $('#khungquenmatkhau').css('display','none');
     }
   function laymatkhau() {
-
+$("#macode").prop('disabled', false);
+bien = 60;
+tao();
      if($('#id_email').val()=="")
      {
          alert('vui lòng nhập email');

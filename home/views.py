@@ -653,19 +653,23 @@ def kiemtracode(request):
         return HttpResponse('0')
 
 
-def doimatkhau(request, code):
-    c='1'
-    t =  request.session.get('nn')
-    t =t+c
+def doimatkhau(request,code):
+    c= "1"
+    t = ""
+    d=request.session.get('nn')
+    form = Rspass()
+    if d!= None:
+        t =c+ d
     if code == t:
-        if request.POST.get('txtmk') != None:
-            tmp = request.session.get('nn')
-            tk = tmp[6]
-            taikhoan = CustomerUser.objects.get(pk=int(tk))
-            taikhoan.password = request.POST.get('txtmk')
-            taikhoan.save()
-            return render(request, "home/doimatkhau.html")
-        else:
-            return render(request, "home/shop.html")
-    else:
-        return render(request, "home/doimatkhau.html")
+        if request.method == 'POST':
+          tmp =request.session.get('nn')
+          tk = int(tmp[6:])
+          if request.POST.get('password1') == request.POST.get('password2'):
+              form.save(tk,request.POST.get('password2'))
+              return render(request,"home/shop.html")
+          else:
+              return render(request,"home/doimatkhau.html",{'form':form,'a':"<p style='color:red'>mật khẩu phải trùng khớp<p>"})
+        else :
+          return render(request,"home/doimatkhau.html",{'form':form,'a':''})
+    else :
+        return render(request,"home/shop.html")

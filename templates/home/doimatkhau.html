@@ -5,17 +5,22 @@
     <title>Thay đổi mật khẩu</title>
 </head>
 <body>
-<form action="" method="get">
+    {{a}}
+<form action="" method="post">
+    {% csrf_token %}
+     {% for key,value in form.errors.items %}
+      {{ value }}
+      {% endfor %}
   <table width="571" height="120" border="1">
     <tr>
       <th width="230" height="31" scope="row">nhập mật khẩu mới:</th>
       <th width="325" scope="row"><label for="txtmk"></label>
-      <input name="txtmk" type="text" id="txtmk" size="50" /></th>
+      {{ form.password1 }}</th>
     </tr>
     <tr>
       <th height="25" scope="row">nhập mật cần đổi:</th>
       <th scope="row"><label for="txtmkm">
-        <input name="txtmkm" type="text" id="txtmkm" size="50" />
+        {{ form.password2 }}
       </label></th>
     </tr>
     <tr>
