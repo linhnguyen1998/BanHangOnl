@@ -64,7 +64,7 @@
                                     <div><a href="{% url 'logoutship' %}">Đăng xuất</a></div>
                                  {% else %}
                                   <div><a href=login>Đăng nhập</a></div>
-								<div><a href="../../register/">Đăng ký</a></div>
+								<div><a href="{% url 'registership' %}">Đăng ký</a></div>
                                 {% endif %}
 							</div>
 						</div>
@@ -299,6 +299,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     var temp ={{ temp }};
     if(temp!=0)
     {
-        window.location="../../../";
+        window.location="../../";
     }
 </script>

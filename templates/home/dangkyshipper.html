@@ -90,7 +90,7 @@ function dangkylai()
      {
          alert('vui lòng nhập email');
      }else {
-         $.get('../sendmail/', {from_email: $('#id_email').val()}, function (data) {
+         $.get('home/../../../sendmail/', {from_email: $('#id_email').val()}, function (data) {
 
              $('#xatnhan').css('display', 'block');
              tao();
@@ -100,7 +100,7 @@ function dangkylai()
 function xatnhan() {
 
 
-    $.get('../xatnhan/',{macode:$('#macode').val()},function (data) {
+    $.get('../../xatnhan/',{macode:$('#macode').val()},function (data) {
 if (data.charAt(0)=='1')
 {
 $('#nhap').click();
@@ -108,7 +108,7 @@ alert('Xác nhận email thành công rồi hihi');
 }
 else
 {
-    $('#baoloi').html('<div style="color:red"> Mã Code Không Chính Xát</div>');
+    $('#baoloi').html('<div style="color:red"> Mã Code Không Chính Xác</div>');
 }
         });
 }

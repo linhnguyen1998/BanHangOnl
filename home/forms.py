@@ -50,3 +50,21 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields =["body"]
+
+
+class  Rspass(forms.Form):
+    password1 = forms.CharField(label='Mật khẩu', widget=forms.PasswordInput())
+    password2 = forms.CharField(label='Xác nhận mật khẩu', widget=forms.PasswordInput())
+
+    def clean_password2(self,id_us):
+        if 'password1' in self.cleaned_data:
+            password1 = self.cleaned_data['password1']
+            password2 = self.cleaned_data['password2']
+            if password1==password2 and password1:
+                return password2
+            raise  forms.ValidationError("Mật khẩu không hợp lệ")
+
+    def save(self,id_us,pass_word):
+        tt = User.objects.get(pk=id_us)
+        tt.set_password(pass_word)
+        tt.save()

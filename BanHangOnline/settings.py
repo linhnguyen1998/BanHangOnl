@@ -25,7 +25,7 @@ SECRET_KEY = '!7yzcquwem9-9@l^3b)+4o$q3fzjov!rcljqnd0@#wrql6mm4&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['linhnguyen.pythonanywhere.com']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
+
 ]
 
 MIDDLEWARE = [
@@ -77,12 +78,8 @@ WSGI_APPLICATION = 'BanHangOnline.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dacap',
-        'USER': 'postgres',
-        'PASSWORD': '16004037',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -124,6 +121,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "home/static"),
+    '/var/www/linhnguyen.pythonanywhere.com/static/',
+]
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 AUTH_USER_MODEL = 'home.CustomerUser'

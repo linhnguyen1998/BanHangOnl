@@ -16,15 +16,15 @@ urlpatterns = [
     path('', views.search, name='search'),
     path('capnhat/',views.thaydoisoluong),
 
-     path('listship/', views.ShowListShip),
-     path('listship/<int:user_id>/', views.ListShip),
+    #  path('listship/', views.ShowListShip),
+    #  path('listship/<int:user_id>/', views.ListShip),
 
      path('trang403/',views.trang403),
 
     path('sendmail/',views.send_email),
     path('xatnhan/',views.kiemtracode),
 
-    path('doimatkhau/<slug:code>',views.doimatkhau),
+    path('doimatkhau/<slug:code>/',views.doimatkhau),
 
 
 

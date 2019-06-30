@@ -35,11 +35,15 @@ urlpatterns = [
 
     path('shipment/login/', auth_views.LoginView.as_view(template_name='home/loginship.html'), name='loginship'),
     path('shipment/logout/', auth_views.LogoutView.as_view(next_page='/shipment/login'), name='logoutship'),
-    path('shipmet/register/', views.registership, name='registership'),
+    path('shipment/register/', views.registership, name='registership'),
 
-    path('shipment/listship/', views.ShowListShip),
-    path('shipment/listship/<int:user_id>', views.ListShip),
-    path('shipment/listship/<int:user_id>/detail/<int:order_id>/', views.ShipDetail, name='detail'),
+    path('shipment/sendmail/',views.send_email),
+    path('shipment/xatnhan/',views.kiemtracode),
+    path('doimatkhau/<slug:code>/',views.doimatkhau),
+
+    # path('shipment/listship/', views.ShowListShip),
+    path('shipment/listship/', views.ListShip),
+    path('shipment/listship/detail/<int:order_id>/', views.ShipDetail, name='detail'),
 
 ]
 

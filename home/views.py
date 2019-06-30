@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_list_or_404
 from home.models import *
-from .forms import RegistrationForm, CommentForm
+from .forms import RegistrationForm, CommentForm, Rspass
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.core import serializers
@@ -545,53 +545,55 @@ def thaydoisoluong(request):
 def ShowListShip(request):
     return render(request, 'home/temp.html')
 
-def ListShip(request, user_id):
-    userid = CustomerUser.objects.get(pk=user_id)
-    order = Shipment.objects.filter(shipper=userid)
-    context = {
-            'order': order,
-        }
-    return render(request, 'home/ShipList.html', context)
-
-def ShipDetail(request, user_id, order_id):
-    if request.GET.get('completed') != None:
-        userid = CustomerUser.objects.get(pk=user_id)
-        # a = Order.objects.filter(id=order_id)
-        orders = Order.objects.get(id=order_id)
-        # b = Shipment.objects.get(shipper=user_id)
-        order = Shipment.objects.filter(shipper=userid, order=orders)
-        cart = Cart.objects.get(pk=orders.cart.id)
-        product = OrderDetail.objects.filter(cart=cart)
-        completed = request.GET.get('completed')
-        if completed == 1:
-           completed = True
-        orders.is_completed = completed
-        orders.save()
+def ListShip(request):
+    if request.user.is_authenticated == True:
+        userid = CustomerUser.objects.get(username=request.user)
+        order = Shipment.objects.filter(shipper=userid)
         context = {
-                'cart':cart,
+                'order': order,
+            }
+        return render(request, 'home/ShipList.html', context)
+
+def ShipDetail(request, order_id):
+    if request.user.is_authenticated == True:
+        if request.GET.get('completed') != None:
+            userid = CustomerUser.objects.get(username=request.user)
+            # a = Order.objects.filter(id=order_id)
+            orders = Order.objects.get(id=order_id)
+            # b = Shipment.objects.get(shipper=user_id)
+            order = Shipment.objects.filter(shipper=userid, order=orders)
+            cart = Cart.objects.get(pk=orders.cart.id)
+            product = OrderDetail.objects.filter(cart=cart)
+            completed = request.GET.get('completed')
+            if completed == 1:
+               completed = True
+            orders.is_completed = completed
+            orders.save()
+            context = {
+                    'cart':cart,
+                    'orders': orders,
+                    'order': order,
+                    'product': product,
+                    'temp': "1"
+                }
+            return render(request, 'home/chitietdonhang.html', context)
+        else:
+            userid = CustomerUser.objects.get(username=request.user)
+            # a = Order.objects.filter(id=order_id)
+            orders = Order.objects.get(id=order_id)
+
+            # b = Shipment.objects.get(shipper=user_id)
+            order = Shipment.objects.filter(shipper=userid, order=orders)
+            cart = Cart.objects.get(pk=orders.cart.id)
+            product = OrderDetail.objects.filter(cart=cart)
+            context = {
+                'cart': cart,
                 'orders': orders,
                 'order': order,
                 'product': product,
-                'temp': "1"
+                'temp':"0"
             }
-        return render(request, 'home/chitietdonhang.html', context)
-    else:
-        userid = CustomerUser.objects.get(pk=user_id)
-        # a = Order.objects.filter(id=order_id)
-        orders = Order.objects.get(id=order_id)
-
-        # b = Shipment.objects.get(shipper=user_id)
-        order = Shipment.objects.filter(shipper=userid, order=orders)
-        cart = Cart.objects.get(pk=orders.cart.id)
-        product = OrderDetail.objects.filter(cart=cart)
-        context = {
-            'cart': cart,
-            'orders': orders,
-            'order': order,
-            'product': product,
-            'temp':"0"
-        }
-        return render(request, 'home/chitietdonhang.html', context)
+            return render(request, 'home/chitietdonhang.html', context)
 
 
 def registership(request):
@@ -606,17 +608,18 @@ def registership(request):
 
 
 def send_email(request):
-    if request.GET.get('user_name') != None:
-        taikhoan = CustomerUser.objects.all()
-        for temp in taikhoan:
+     if request.GET.get('user_name') != None:
+        taikhoan =CustomerUser.objects.all()
+        for temp in taikhoan :
             if temp.username == request.GET.get('user_name'):
                 a = uuid.uuid4().hex[:6].upper()
                 request.session['code'] = a
-                request.session['us'] = temp.id
+                tpma = temp.id
+                request.session['us'] = str(temp.id)
                 request.session.set_expiry(160);
                 subject, from_email, to = 'Xát Nhận Tài Khoản', 'demo1hacker@gmail.com', temp.email
                 text_content = 'This is an important message.'
-                html_content = '<h4> xin chào ' + to + '</h4>' + '<div>Đây là mã xát nhận  của bạn mã có hiệu lực trong 60s</div><p></p> <div style="background-color: #0000FF;font-size: 40px;width: 200px;height: auto;text-align: center" >' + a + '</div>'
+                html_content = '<h4> xin chào '+to+'</h4>'+'<div>Đây là mã xát nhận  của bạn mã có hiệu lực trong 60s</div><p></p> <div style="background-color: #0000FF;font-size: 40px;width: 200px;height: auto;text-align: center" >'+a+'</div>'
                 msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
                 msg.attach_alternative(html_content, "text/html")
                 msg.send()
@@ -625,13 +628,13 @@ def send_email(request):
                 # from_email = request.POST.get('from_email')
                 # send_mail(subject, message, 'demo1hacker@gmail.com', ['kingminhluan9@gmail.com'],fail_silently=False)
                 return HttpResponse('Vui Lòng kiểm tra mail')
-    if request.GET.get('from_email') != None:
+     if request.GET.get('from_email') != None:
         a = uuid.uuid4().hex[:6].upper()
         request.session['code'] = a
         request.session.set_expiry(60);
         subject, from_email, to = 'Xát Nhận Tài Khoản', 'demo1hacker@gmail.com', request.GET.get('from_email')
         text_content = 'This is an important message.'
-        html_content = '<h4> xin chào ' + to + '</h4>' + '<div>Đây là mã xát nhận  của bạn mã có hiệu lực trong 60s</div><p></p> <div style="background-color: #0000FF;font-size: 40px;width: 200px;height: auto;text-align: center" >' + a + '</div>'
+        html_content = '<h4> xin chào '+to+'</h4>'+'<div>Đây là mã xát nhận  của bạn mã có hiệu lực trong 60s</div><p></p> <div style="background-color: #0000FF;font-size: 40px;width: 200px;height: auto;text-align: center" >'+a+'</div>'
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
         msg.attach_alternative(html_content, "text/html")
         msg.send()
@@ -642,16 +645,18 @@ def send_email(request):
         return HttpResponse('Vui Lòng kiểm tra mail')
 
 
+
 def kiemtracode(request):
     if request.GET.get('macode') == request.session.get('code'):
-        a = uuid.uuid4().hex[:6].upper()
-        b = request.session.get('code')
-        c = a + b
-        request.session['nn'] = c
-        return HttpResponse('1' + c)
+         a = uuid.uuid4().hex[:6].upper()
+         c=""
+         b =request.session.get('us')
+         if b!= None:
+            c =a+b
+         request.session['nn'] = c
+         return HttpResponse('1'+c)
     else:
         return HttpResponse('0')
-
 
 def doimatkhau(request,code):
     c= "1"
